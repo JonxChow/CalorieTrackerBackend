@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Food Calorie Detector</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/static/styles.css">
+  <script>
+    function confirmPrediction(isCorrect) {
+      if (isCorrect) {
+        document.getElementById("true_label").value = "";
+        document.getElementById("retrainForm").submit();
+      } else {
+        document.getElementById("correctLabelDiv").style.display = "block";
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1><i class="fas fa-apple-alt"></i> Food Calorie Detector</h1>
+    </header>
+    <main>
+      <!-- Inference Form -->
+      <form action="/upload" method="post" enctype="multipart/form-data">
+        <label for="file"><i class="fas fa-camera"></i> Choose an image for inference:</label>
+        <input type="file" id="file" name="file" accept="image/*" required>
+        <button type="submit"><i class="fas fa-utensils"></i> Detect Nutrition</button>
+      </form>
+      
+      <!-- Results Section with Confirmation Prompt -->
+      {% if results and predicted_label and image_data %}
+      <div class="result animated fadeInUp">
+        <h2><i class="fas fa-info-circle"></i> Nutrition Details</h2>
+        <div class="card-container">
+          {% for result in results %}
+            {% set parts = result.split('|') %}
+            <div class="nutrition-card">
+              <h3>{{ parts[0] }}</h3>
+              <div class="nutrition-data">
+                <div class="nutrient"><i class="fas fa-fire-alt"></i><span>{{ parts[1] }} kcal</span></div>
+                <div class="nutrient"><i class="fas fa-bread-slice"></i><span>{{ parts[2] }} g carbs</span></div>
+                <div class="nutrient"><i class="fas fa-drumstick-bite"></i><span>{{ parts[3] }} g protein</span></div>
+                <div class="nutrient"><i class="fas fa-cookie"></i><span>{{ parts[4] }} g fat</span></div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        <div class="confirmation">
+          <p>Is the detected food <strong>{{ predicted_label }}</strong> correct?</p>
+          <button type="button" onclick="confirmPrediction(true)">Yes</button>
+          <button type="button" onclick="confirmPrediction(false)">No</button>
+        </div>
+        <!-- Retraining Form -->
+        <form id="retrainForm" action="/retrain_user" method="post" enctype="multipart/form-data">
+          <!-- Hidden field carrying the base64-encoded image -->
+          <input type="hidden" name="image_data" value="{{ image_data }}">
+          <!-- Hidden field for the predicted label -->
+          <input type="hidden" name="predicted_label" value="{{ predicted_label }}">
+          <div id="correctLabelDiv" style="display: none;">
+            <label for="true_label">Enter the correct food label:</label>
+            <input type="text" id="true_label" name="true_label" placeholder="e.g., beef tartare">
+          </div>
+        </form>
+        <!-- Display retraining message if available -->
+        {% if retrain_message %}
+          <p class="retrain-message">{{ retrain_message }}</p>
+        {% endif %}
+        <a href="/"><i class="fas fa-sync-alt"></i> Try another image</a>
+      </div>
+      {% endif %}
+    </main>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+</body>
+</html>
