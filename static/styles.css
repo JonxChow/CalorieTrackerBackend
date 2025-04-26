@@ -202,3 +202,70 @@ button[type="submit"]:hover,
 .fadeInUp {
   animation-name: fadeInUp;
 }
+
+/* ===== Nutrition Facts Label ===== */
+.nutrition-card {
+  /* widened from 360px to 400px */
+  max-width: 400px;
+  width: 100%;        /* ensures it scales down on narrow screens */
+  margin: 0 auto 20px;
+}
+
+.nutrition-facts {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Arial Narrow', Arial, sans-serif;
+  background: #fff;
+  color: #000;
+}
+
+.nutrition-facts th {
+  text-align: left;
+  font-size: 1.4em;
+  padding-bottom: 4px;
+  border-bottom: 6px solid #000;
+}
+
+.nutrition-facts .subheader td {
+  font-size: 0.9em;
+  padding: 4px 0;
+}
+
+.nutrition-facts td {
+  padding: 2px 0;
+  font-size: 0.9em;
+}
+
+.nutrition-facts .section-label td {
+  font-weight: bold;
+}
+
+.nutrition-facts .thick-line td {
+  border-top: 4px solid #000;
+}
+
+.nutrition-facts .thin-line td {
+  border-top: 1px solid #000;
+}
+
+.nutrition-facts .indent {
+  padding-left: 12px;
+  font-size: 0.85em;
+}
+
+/* === Minor Visual Tweaks === */
+/* Center the confirmation prompt */
+.confirmation {
+  text-align: center;
+  margin-top: 20px;
+}
+.confirmation button {
+  margin: 0 8px;
+}
+
+/* Center the “Try another image” link */
+main > a {
+  display: block;
+  text-align: center;
+  margin: 15px auto;
+}
